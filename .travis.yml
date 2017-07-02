@@ -1,0 +1,36 @@
+# curl -u premysl.vyhnal@gmail.com   -d '{"scopes":["public_repo"],"note":"XXX token name XXX"}'   https://api.github.com/authorizations
+
+
+language: bash
+sudo: false
+install: true
+addons:
+  apt:
+    packages:
+    - lua5.1
+    - python2.7
+    - luarocks
+before_install:
+  - luarocks install --local lpeg
+  - "`luarocks path`" # execute the luarocks output - sets the paths for 'local' tree
+
+script: "[[ -n $TRAVIS_TAG ]] && ./build.sh web || ./build.sh" # web only for tags
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    # travis encrypt <token>
+    secure: "VlcnVOU10ZZLzYglff7yEXkRyWIz/Ue9pRaaDLO/VxCy9hbSKQztZ47ht9kjrD6xD99IGVVKrsbfG4HPtwIi3+zB1h98vAktn8Q9rNxefV9YTc+vRnMmwKQpHIuxWcnSLCU7j8oHZvLVZXqOp7Le5bt1rYk0W3IYxXC06OO4xs4wyoqJXnaC/HCGQoshigDilxdjCBhTxyQ4RX/FSLrGMC+qD1NUPqmxfOxzTqbJKEjAvWLwecHx6fEMHu7QnEHW9snbw/sjiuQtEOD9SDZN1upOyC/GMof7cMRKGW/5dkDm88GNlZYovD6wbL0RVdaQovkQBO48QI+AgwA0fA6pzHmldyXDBshXQt6apGv+YxkbyQ5JkKwhFLy01fT7RYsbiWrk0vu4UMtkInt9ggUz9xGqbhcm7NJHbwPbvvkSJ9x+8ZlDtXyOf6KNy3IHemlF+W9bsaLOOpX+WhOB1Ztr9WO58YVBBryCiXisPTdGeZrX0PivllAtIUmGoiJW5a/nXUZrDCHR6S3lf0MW0BVyQ9/2IHfDry1t4gaIukjfEW2OEppR6/Mq+WbMNiMlBY3HNb+ySjnJin16cm1lTDR40WnQjwJEUvoI5z/R6yKyxveTMnrI18YOCBTMt6mRTFLxdarjM5d90wyVsuvEgR1vjKzvDIZ5Pc7yWGHmOZG1BQ0="
+  file:
+  - target/enjoy.love
+  - target/enjoy-win.zip
+  - target/enjoy-web.zip
+  on:
+    tags: true
+    all_branches: true
+after_success:
+- "[[ -n $TRAVIS_TAG ]] && ./build.sh deploy $TRAVIS_REPO_SLUG"
+env:
+  global:
+   # travis encrypt GH_TOKEN=<token>
+  - secure: "US62KL4rsH5O9ZgalT/TXFx1V4lWt7DJf3nt7C/nU8pV7zvzIMK7JLXbm2ntkFheITH26NFcxOoIWNdtZz+W5ae8mXgORFBXOu7LfZ9QtlfChdkWKflpVGibcWZIWF8OdvQKtNAZ7HbTk9dDVE1Gz28SWC8Zqi3nmFEAEG+uMTl35p2pPv+Ee+5TuCzJYFvBA76zbMRRe4FnZTTOMPRYlatghtEX9FlGKUZo7/Wm4xZ0tSJkfLbPUoVB8Ai0eQtBneZrtD3PoIew7blj8JkBI5/QxHY8qtCTj4e9AHccvbNZ/iCHmZVNixD5Yb92S32LfKUqqgbVZWiBVGYnpxeLoAEUE6HwuGVs5WoJIFnEOBvH16WSCY2Fn0i2NfDZ1Gp9nDB4PJ8lb32z9PtpXiEtpyVCtr0alyeLI0w4yaaP7Yj0OYKMx95CMQkQSIHjSfVq462X/U4rHd36PbMJcMpPFv8yKo67HyFDlkwLbLHgRlCu+11BLNMCGISelvobOAGCO34ixYuVwOcn8q3Be4AUbbe2vh8uimbhSO7qRhdZZkDVGuF3zhTvownqN1G23IONNom9DrxGAN09MCcM/L1vLp10KCMKoL9fQuum+hRl/t0Yfvj3jNweKMRBrkFb3qRqH41Gr4AV8XqpWdYrIyRlChSm4IBNVTQ8M3ANI660Ep0="
