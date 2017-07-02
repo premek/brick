@@ -1,3 +1,5 @@
+http://brick-doc.readthedocs.io
+
 # Brick Game Machine
 
 E 88 8in1
