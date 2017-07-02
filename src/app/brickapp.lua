@@ -1,7 +1,4 @@
-local parser  = require 'brick-script.brickscript.parser'
 local Runtime = require 'brick-script.brickscript.runtime'
-
-
 
 local function read(file) -- TODO should this be here or in client code? At lease allow to pass an ink content in a string
   print("loading", file)
@@ -23,6 +20,8 @@ local load = function (filename)
       parsed = require (string.sub(filename, 1, -6)) -- without '.brick'
       print('loaded precompiled')
     end) then
+      -- require parser only if previous fails
+      local parser  = require 'brick-script.brickscript.parser'
       parsed = parser:match(read(filename))
       print('compiled')
     end
