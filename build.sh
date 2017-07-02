@@ -47,7 +47,7 @@ cd target/src
 
 # compile .brick scripts into lua table so the runtime will not need lpeg dep.
 for F in brick-app/*.brick; do
-  lua brick-script/brickscript/compiler.lua "$F" > "$F.lua"
+  lua brick-script/brickscript/compiler.lua "$F" > "${F%.*}.lua"
 done
 
 zip -9 -r - . > "../${P}.love"

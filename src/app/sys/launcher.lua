@@ -1,5 +1,6 @@
 local font = require "app.lib.font"
 local numPos = {2,6}
+local brickapp = require "app.brickapp"
 
 -- TODO lib
 local drawBitmap = function (d, map, pos)
@@ -13,12 +14,6 @@ end
 local selected = 1
 local frame = 0
 
-local games = {
-  "app.tetris",
-  "app.snake",
-  "app.nfs",
-}
-
 -- sys apps get os access
 return function(os)
  return function(m)
@@ -29,10 +24,10 @@ return function(os)
   drawBitmap(m.display.main, font[selected], numPos)
 
   -- FIXME input
-  if m.input.down then selected = selected+1; if selected > #games then selected = 1 end end
+  if m.input.down then selected = selected+1; if selected > 9 then selected = 1 end end
   if m.input.rotate then
     m.display.main.clear()
-    os.app=require(games[selected]) -- TODO reset the app if already launched before
+    os.app=brickapp.load(selected)
   end
 
  end
