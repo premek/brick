@@ -10,7 +10,12 @@ addons:
     - lua5.1
     - python2.7
     - luarocks
+    # Handle git submodules yourself
+git:
+    submodules: false
 before_install:
+  - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+  - git submodule update --init --recursive
   - luarocks install --local lpeg
   - "`luarocks path`" # execute the luarocks output - sets the paths for 'local' tree
 
@@ -22,9 +27,9 @@ deploy:
     # travis encrypt <token>
     secure: "VlcnVOU10ZZLzYglff7yEXkRyWIz/Ue9pRaaDLO/VxCy9hbSKQztZ47ht9kjrD6xD99IGVVKrsbfG4HPtwIi3+zB1h98vAktn8Q9rNxefV9YTc+vRnMmwKQpHIuxWcnSLCU7j8oHZvLVZXqOp7Le5bt1rYk0W3IYxXC06OO4xs4wyoqJXnaC/HCGQoshigDilxdjCBhTxyQ4RX/FSLrGMC+qD1NUPqmxfOxzTqbJKEjAvWLwecHx6fEMHu7QnEHW9snbw/sjiuQtEOD9SDZN1upOyC/GMof7cMRKGW/5dkDm88GNlZYovD6wbL0RVdaQovkQBO48QI+AgwA0fA6pzHmldyXDBshXQt6apGv+YxkbyQ5JkKwhFLy01fT7RYsbiWrk0vu4UMtkInt9ggUz9xGqbhcm7NJHbwPbvvkSJ9x+8ZlDtXyOf6KNy3IHemlF+W9bsaLOOpX+WhOB1Ztr9WO58YVBBryCiXisPTdGeZrX0PivllAtIUmGoiJW5a/nXUZrDCHR6S3lf0MW0BVyQ9/2IHfDry1t4gaIukjfEW2OEppR6/Mq+WbMNiMlBY3HNb+ySjnJin16cm1lTDR40WnQjwJEUvoI5z/R6yKyxveTMnrI18YOCBTMt6mRTFLxdarjM5d90wyVsuvEgR1vjKzvDIZ5Pc7yWGHmOZG1BQ0="
   file:
-  - target/enjoy.love
-  - target/enjoy-win.zip
-  - target/enjoy-web.zip
+  - target/brick.love
+  - target/brick-win.zip
+  - target/brick-web.zip
   on:
     tags: true
     all_branches: true
