@@ -10,7 +10,12 @@ addons:
     - lua5.1
     - python2.7
     - luarocks
+    # Handle git submodules yourself
+git:
+    submodules: false
 before_install:
+  - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+  - git submodule update --init --recursive
   - luarocks install --local lpeg
   - "`luarocks path`" # execute the luarocks output - sets the paths for 'local' tree
 
