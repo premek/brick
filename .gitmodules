@@ -1,0 +1,3 @@
+[submodule "src/brick-script"]
+	path = src/brick-script
+	url = git@github.com:premek/brick-script.git
