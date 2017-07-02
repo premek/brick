@@ -15,17 +15,16 @@ local function read(file) -- TODO should this be here or in client code? At leas
 end
 
 local load = function (filename)
-    local parsed
     if not pcall(function ()
-      parsed = require (string.sub(filename, 1, -6)) -- without '.brick'
-      print('loaded precompiled')
+      local req = string.sub(filename, 1, -7) -- without '.brick'
+      print('loading precompiled', req)
+      return require (req)
     end) then
+      print('compiling', filename)
       -- require parser only if previous fails
       local parser  = require 'brick-script.brickscript.parser'
-      parsed = parser:match(read(filename))
-      print('compiled')
+      return parser:match(read(filename))
     end
-    return parsed
   end
 
 return {
