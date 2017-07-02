@@ -1,3 +1,6 @@
+[![status](https://travis-ci.org/premek/brick.svg)](https://travis-ci.org/premek/brick)
+
+
 http://brick-doc.readthedocs.io
 
 # Brick Game Machine
