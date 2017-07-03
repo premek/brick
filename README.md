@@ -1,9 +1,12 @@
 [![status](https://travis-ci.org/premek/brick.svg)](https://travis-ci.org/premek/brick)
 
+[Run online](https://premek.github.io/brick/) - experimental
 
 http://brick-doc.readthedocs.io
 
 # Brick Game Machine
+
+
 
 E 88 8in1
 * https://www.youtube.com/watch?v=9lHYKERtK_8
