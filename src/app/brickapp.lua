@@ -15,16 +15,18 @@ local function read(file) -- TODO should this be here or in client code? At leas
 end
 
 local load = function (filename)
+    local parsed
     if not pcall(function ()
       local req = string.sub(filename, 1, -7) -- without '.brick'
       print('loading precompiled', req)
-      return require (req)
+      parsed = require(req)
     end) then
       print('compiling', filename)
       -- require parser only if previous fails
       local parser  = require 'brick-script.brickscript.parser'
-      return parser:match(read(filename))
+      parsed = parser:match(read(filename))
     end
+    return parsed
   end
 
 return {
@@ -32,7 +34,6 @@ return {
   local app = load('brick-app/'..gameNumber..'.brick')
   local runtime = Runtime()
   runtime.assign('print', print)
-
   local appMainLoop = runtime.run(app)
   return appMainLoop
  end
