@@ -1,15 +1,7 @@
-local font = require("app.brickscript").load('lib/font')
 local numPos = {2,6}
 local brickscript = require "app.brickscript"
-
--- TODO lib
-local drawBitmap = function (d, map, pos)
-  for cy, line in ipairs(map) do
-    for cx, val in ipairs(line) do
-      if val>0 then d.on(cx-1+pos[1], cy-1+pos[2]) end
-    end
-  end
-end
+local font = brickscript.load('lib/font')
+local draw = require "app.lib.draw"
 
 local selected = 1
 
@@ -19,7 +11,7 @@ return function(os)
 
   -- redraw
   m.display.main.clear()
-  drawBitmap(m.display.main, font[selected], numPos)
+  draw.drawBitmap(m.display.main, font[selected+1], numPos)
 
   -- FIXME input
   if m.input.down then selected = selected+1; if selected > 9 then selected = 1 end end

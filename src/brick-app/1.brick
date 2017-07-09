@@ -1,4 +1,5 @@
 step: 30
 { machine ->
   machine.score << machine.score.plus(step)
+  machine.display.next.on(0,0)
 }

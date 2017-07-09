@@ -5,7 +5,7 @@ local draw = require 'draw'
 local input = require 'input'
 local machine = require 'machine.machine'
 local timer = require 'timer'
-local os = require 'app.sys.os'
+local os = require 'app.os'
 
 function love.load()
 end

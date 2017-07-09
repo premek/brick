@@ -3,7 +3,7 @@ local os = {
   muted = false,
 }
 
-local launcher = require('app.sys.launcher')(os)
+local launcher = require('app.launcher')(os)
 os.reset = function() os.app=launcher end
 os.reset()
 return os
