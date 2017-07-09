@@ -30,8 +30,8 @@ local load = function (filename)
   end
 
 return {
- load = function(gameNumber)
-  local app = load('brick-app/'..gameNumber..'.brick')
+ load = function(filename) -- without '.brick', TODO allow to bind variables
+  local app = load('brick-app/'..filename..'.brick')
   local runtime = Runtime()
   runtime.assign('print', print)
   local appMainLoop = runtime.run(app)
