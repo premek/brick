@@ -46,7 +46,7 @@ cp -r src target
 cd target/src
 
 # compile .brick scripts into lua table so the runtime will not need lpeg dep.
-for F in brick-app/*.brick; do
+for F in brick-app/*.brick brick-app/*/*.brick; do
   lua brick-script/brickscript/compiler.lua "$F" > "${F%.*}.lua"
 done
 

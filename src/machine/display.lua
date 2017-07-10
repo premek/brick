@@ -15,6 +15,23 @@ return function(pixelsX, pixelsY)
    end
   end
 
+  d.bitmap = function (map, pos)
+    for cy, line in ipairs(map) do
+      for cx, val in ipairs(line) do
+        if val>0 then d.on(cx-1+pos[1], cy-1+pos[2]) end
+      end
+    end
+  end
+
+  d.line = function (from, to)
+    if from[1]==to[1] then
+      for y=from[2], to[2] do d.on(from[1], y) end
+    elseif from[2]==to[2] then
+      for x=from[1], to[1] do d.on(x, from[2]) end
+    end
+  end
+
+
   local xy = function(x, y)
     if y == nil and type(x) == 'table' then return x[1], x[2] end
     return x, y

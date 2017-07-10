@@ -5,7 +5,7 @@ local draw = require 'draw'
 local input = require 'input'
 local machine = require 'machine.machine'
 local timer = require 'timer'
-local os = require 'app.os'
+local os = require('app.os')(machine)
 
 function love.load()
 end
@@ -17,7 +17,7 @@ end
 local int = timer.interval(1/25, function ()
     if os.paused or machine.gameover then return end
     input.update(machine)
-    os.app(machine)
+    os.app()
   end)
 
 function love.update(dt)

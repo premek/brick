@@ -1,23 +1,35 @@
 local numPos = {2,6}
 local brickscript = require "app.brickscript"
 local font = brickscript.load('lib/font')
-local draw = require "app.lib.draw"
 
 local selected = 1
 
 -- sys apps get os access
-return function(os)
- return function(m)
+return function(os, machine)
+ return function()
 
   -- redraw
-  m.display.main.clear()
-  draw.drawBitmap(m.display.main, font[selected+1], numPos)
+  machine.display.main.clear()
+  machine.display.main.bitmap(font[selected+1], numPos)
 
   -- FIXME input
-  if m.input.down then selected = selected+1; if selected > 9 then selected = 1 end end
-  if m.input.rotate then
-    m.display.main.clear()
-    os.app=brickscript.load(selected)
+  if machine.input.down then selected = selected+1; if selected > 9 then selected = 1 end end
+  if machine.input.rotate then
+
+    local bindings = {
+      machine=machine,
+      display=machine.display.main,
+      displayNext=machine.display.next,
+      score=machine.score,
+      print=print,
+      --draw = require "app.lib.draw",
+      ['<'] = function(callback) if machine.input.left then callback() end end,
+      ['>'] = function(callback) if machine.input.right then callback() end end,
+    }
+
+
+    machine.display.main.clear()
+    os.app=brickscript.load(selected, bindings)
   end
 
  end

@@ -30,10 +30,10 @@ local load = function (filename)
   end
 
 return {
- load = function(filename) -- without '.brick', TODO allow to bind variables
+ load = function(filename, bindings) -- without '.brick'
   local app = load('brick-app/'..filename..'.brick')
   local runtime = Runtime()
-  runtime.assign('print', print)
+  if bindings then for name, value in pairs(bindings) do runtime.assign(name, value) end end
   local appMainLoop = runtime.run(app)
   return appMainLoop
  end
