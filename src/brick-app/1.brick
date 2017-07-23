@@ -21,23 +21,39 @@ startPos: [3, 0]
 
 brick: bricks.random
 nextBrick: bricks.random
-pos: startPos
 
 
-display.bitmap(###, [2,3], 2)
+display.line([0,19], [9,19], 2)
 
+moved: 0
 
-redraw: {
-  display.clear(1)
+next: {
+  brick << nextBrick
+  nextBrick << bricks.random
   displayNext.clear
   displayNext.bitmap(nextBrick)
-  display.bitmap(brick, pos, 1)
+  display.bitmap(brick, startPos, 1)
+  moved << 0
 }
 
-{
-  < {pos << pos.<}
-  > {pos << pos.>}
-  pos << pos.v
+next
 
-  redraw
+step: every(3)
+
+
+{
+  < {display.shift(1.negate, 0, 1)}
+  > {display.shift(1, 0, 1)}
+
+  step{
+    display.shift(0, 1, 1)
+    moved << moved.plus(1)
+  }
+
+  display.collides(1,2){
+    moved.<(2){machine.gameover << 1}
+    display.shift(0, 1.negate, 1) //move back up
+    display.move(1,2)
+    next
+  }
 }

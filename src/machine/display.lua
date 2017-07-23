@@ -10,18 +10,43 @@ return function(pixelsX, pixelsY)
     if layer then d.layers[layer] = {} else d.layers = {} end
   end
 
+  d.copy = function (fromLayer, toLayer)
+    for x=0, d.w do
+      for y=0, d.h do
+        if d.get(x, y, fromLayer) then d.on(x,y,toLayer) end
+      end
+    end
+  end
+
+  d.move = function (fromLayer, toLayer)
+    d.copy(fromLayer, toLayer)
+    d.clear(fromLayer)
+  end
+
   d.shift = function (x, y, layer)
     local layers = layer and {d.layers[layer]} or d.layers
     for _, l in pairs(layers) do
       -- TODO move up and left
       for xx=1, x do
         table.insert(l, 0, {})
-          l[pixelsX*2] = nil -- keep some pixels outside the visible area to be able to shift them back
+          l[pixelsX] = nil
       end
       for yy=1, y do
         for _, col in pairs(l) do
           table.insert(col, 0, false)
-          col[pixelsY*2] = nil -- keep some pixels outside the visible area to be able to shift them back
+          col[pixelsY] = nil
+        end
+      end
+      if x<0 then
+        for xx=1, -x do
+          table.remove(l, 1)
+        end
+      end
+      if y<0 then
+        for yy=1, -y do
+          for _, col in pairs(l) do
+            table.remove(col, 1)
+          end
         end
       end
     end
