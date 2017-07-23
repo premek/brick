@@ -36,6 +36,24 @@ return function(pixelsX, pixelsY)
     end
   end
 
+  local getCollisions = function (l1, l2)
+    local collisions={}
+    for x=0, d.w do
+      for y=0, d.h do
+        if d.get(x, y, l1) and d.get(x, y, l2) then table.insert(collisions, {x,y}) end
+      end
+    end
+    return collisions
+  end
+
+  d.collides = function (l1, l2, callback)
+    if #getCollisions(l1, l2) > 0 then callback() end
+  end
+
+  d.collisions = function (l1, l2, callback)
+    callback(getCollisions(l1, l2))
+  end
+
   d.line = function (from, to, layer)
     if from[1]==to[1] then
       for y=from[2], to[2] do d.on(from[1], y, layer) end

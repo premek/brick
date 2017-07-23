@@ -2,7 +2,7 @@ local numPos = {2,6}
 local brickscript = require "app.brickscript"
 local font = brickscript.load('lib/font')
 
-local selected = 2
+local selected = 1
 
 -- sys apps get os access
 return function(os, machine)
