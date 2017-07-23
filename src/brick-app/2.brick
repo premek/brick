@@ -1,0 +1,50 @@
+car:
+-#-
+###
+-#-
+#-#
+
+obstacles: [
+-####
+-####,
+-----####
+-----####
+]
+
+lives: 3
+
+w: display.w.minus(1)
+h: display.h.minus(1)
+
+display.line([0, 0], [0, h], 2)
+display.line([w, 0], [w, h], 2)
+
+die: {
+  lives << lives.minus(1)
+  displayNext.clear
+  displayNext.line([0,0], [0, lives])
+}
+die
+
+machine.speed << 1
+machine.level << 1
+
+nth: every(15) TODO
+
+move: { pos ->
+  display.clear(1)
+  display.bitmap(car, pos, 1)
+}
+
+move([2, 16])
+
+{
+  < {move([2, 16])}
+  > {move([5, 16])}
+  display.shift(0, 1, 10)
+  nth {
+    display.bitmap(obstacles.random, [0,0], 10)
+  }
+  TODO collisions
+  machine.score << machine.score.plus(1)
+}

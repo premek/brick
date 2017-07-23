@@ -1,35 +1,43 @@
-car:
--#-
+bricks: [
+##
+##
+,
+####
+,
+##-
+-##
+,
+-##
+##-
+,
 ###
--#-
-#-#
+#--
+,
+###
+--#
+]
 
-left: [1, 16]
-right: [6, 16]
-position: left
+startPos: [3, 0]
 
-lives: 2
+brick: bricks.random
+nextBrick: bricks.random
+pos: startPos
 
-w: display.w.minus(1)
-h: display.h.minus(1)
+
+display.bitmap(###, [2,3], 2)
+
 
 redraw: {
-  display.clear
+  display.clear(1)
   displayNext.clear
-
-  displayNext.line([0,0], [0, lives])
-  display.bitmap(car, position)
-  display.line([0, 0], [0, h])
-  display.line([w, 0], [w, h])
-
-  machine.speed << 1
-  machine.level << 1
+  displayNext.bitmap(nextBrick)
+  display.bitmap(brick, pos, 1)
 }
 
 {
-  < {position << left}
-  > {position << right}
-  // TODO obstacles, collision -- TODO add TODOs to language syntax
-  machine.score << machine.score.plus(1)
+  < {pos << pos.<}
+  > {pos << pos.>}
+  pos << pos.v
+
   redraw
 }

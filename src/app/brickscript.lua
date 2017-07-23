@@ -1,5 +1,5 @@
 local Runtime = require 'brick-script.brickscript.runtime'
-
+--TODO move this to brickscript lib
 local function read(file) -- TODO should this be here or in client code? At lease allow to pass an ink content in a string
   print("loading", file)
   if love and love.filesystem and love.filesystem.read then

@@ -3,31 +3,44 @@ return function(pixelsX, pixelsY)
   local d = {
     w = pixelsX,
     h = pixelsY,
-    display = {},
+    layers = {},
   }
 
-  d.clear = function ()
-   for x=0, d.w-1 do
-    d.display[x] = {}
-    for y=0,d.h-1 do
-      d.display[x][y]=false
-    end
-   end
+  d.clear = function (layer)
+    if layer then d.layers[layer] = {} else d.layers = {} end
   end
 
-  d.bitmap = function (map, pos)
-    for cy, line in ipairs(map) do
-      for cx, val in ipairs(line) do
-        if val>0 then d.on(cx-1+pos[1], cy-1+pos[2]) end
+  d.shift = function (x, y, layer)
+    local layers = layer and {d.layers[layer]} or d.layers
+    for _, l in pairs(layers) do
+      -- TODO move up and left
+      for xx=1, x do
+        table.insert(l, 0, {})
+          l[pixelsX*2] = nil -- keep some pixels outside the visible area to be able to shift them back
+      end
+      for yy=1, y do
+        for _, col in pairs(l) do
+          table.insert(col, 0, false)
+          col[pixelsY*2] = nil -- keep some pixels outside the visible area to be able to shift them back
+        end
       end
     end
   end
 
-  d.line = function (from, to)
+  d.bitmap = function (map, pos, layer)
+    pos = pos or {0,0}
+    for cy, line in ipairs(map) do
+      for cx, val in ipairs(line) do
+        if val>0 then d.on(cx-1+pos[1], cy-1+pos[2], layer) end
+      end
+    end
+  end
+
+  d.line = function (from, to, layer)
     if from[1]==to[1] then
-      for y=from[2], to[2] do d.on(from[1], y) end
+      for y=from[2], to[2] do d.on(from[1], y, layer) end
     elseif from[2]==to[2] then
-      for x=from[1], to[1] do d.on(x, from[2]) end
+      for x=from[1], to[1] do d.on(x, from[2], layer) end
     end
   end
 
@@ -38,20 +51,26 @@ return function(pixelsX, pixelsY)
   end
 
 
-  d.set = function(x,y, val)
+  d.set = function(x,y, val, layer)
     x,y=xy(x,y);
-    if not d.display[x] then d.display[x] = {} end
-    d.display[x][y] = val
+    layer = layer or 'default'
+    if not d.layers[layer] then d.layers[layer] = {} end
+    if not d.layers[layer][x] then d.layers[layer][x] = {} end
+    d.layers[layer][x][y] = val
   end
-  -- FIXME which one?
-  d.isOn = function(x,y) x,y=xy(x,y); return d.display[x] and d.display[x][y] end
-  d.get  = function(x,y) x,y=xy(x,y); return d.display[x] and d.display[x][y] end
 
-  d.on = function(x,y) d.set(x, y, true) end
-  d.off = function(x,y) d.set(x, y, false) end
-  d.toggle = function(x,y) d.set(x,y, not d.get(x,y)) end
+  d.get  = function(x,y, layer)
+    x,y = xy(x,y)
+    local layers = layer and {d.layers[layer]} or d.layers
+    for _, l in pairs(layers) do
+      if l[x] and l[x][y] then return true end
+    end
+  end
+  d.isOn = d.get
 
-  d.clear()
+  d.on = function(x,y, layer) d.set(x, y, true, layer) end
+  d.off = function(x,y, layer) d.set(x, y, false, layer) end
+  d.toggle = function(x,y, layer) d.set(x,y, not d.get(x,y, layer), layer) end
 
   return d
 end
